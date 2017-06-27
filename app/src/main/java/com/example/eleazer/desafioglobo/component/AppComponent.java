@@ -1,7 +1,8 @@
 package com.example.eleazer.desafioglobo.component;
 
-import com.example.eleazer.desafiomobfiq.MainActivity;
-import com.example.eleazer.desafiomobfiq.module.AppModule;
+
+import com.example.eleazer.desafioglobo.MainActivity;
+import com.example.eleazer.desafioglobo.module.AppModule;
 
 import dagger.Component;
 

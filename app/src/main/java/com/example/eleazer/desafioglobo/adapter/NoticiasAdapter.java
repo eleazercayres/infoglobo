@@ -8,19 +8,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.eleazer.desafiomobfiq.R;
-import com.example.eleazer.desafiomobfiq.modelos.Bestinstallment;
-import com.example.eleazer.desafiomobfiq.modelos.Products;
-import com.squareup.picasso.Picasso;
+import com.example.eleazer.desafioglobo.R;
+import com.example.eleazer.desafioglobo.modelos.Noticias;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
-public abstract class ProductAdapter  extends RecyclerView.Adapter<ProductAdapter.MyViewHolder> {
+public abstract class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Products> products;
+    private List<Noticias> products;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -37,7 +33,7 @@ public abstract class ProductAdapter  extends RecyclerView.Adapter<ProductAdapte
     }
 
 
-    public ProductAdapter(Context mContext, List<Products> products) {
+    public NoticiasAdapter(Context mContext, List<Noticias> products) {
         this.mContext = mContext;
         this.products = products;
     }
@@ -52,17 +48,10 @@ public abstract class ProductAdapter  extends RecyclerView.Adapter<ProductAdapte
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-        Products product = this.products.get(position);
+        Noticias noticia = this.products.get(position);
 
 
-        holder.title.setText(product.getName());
-        //TODO: tratar regra por sku para determinar o preço exato
-        //TODO: Tratar valores a serem exibidospara evitar null
-        Locale ptBr = new Locale("pt", "BR");
-        Bestinstallment bestinstallment = product.getSkus().get(0).getSellers().get(0).getBestinstallment();
-        holder.brand.setText(product.getBrand() + "\n" + "R$ " + NumberFormat.getCurrencyInstance(ptBr).format(product.getSkus().get(0).getSellers().get(0).getPrice()) + "\n" +
-                bestinstallment.getCount() + " x de R$ " + NumberFormat.getCurrencyInstance(ptBr).format(bestinstallment.getValue()) + "\n" + "Preço final: " +
-                NumberFormat.getCurrencyInstance(ptBr).format(bestinstallment.getTotal()));
+        holder.title.setText(noticia.getProduto());
 
         if (this.products.size() > 6){
             if ((position >= getItemCount() - 1))
@@ -70,7 +59,7 @@ public abstract class ProductAdapter  extends RecyclerView.Adapter<ProductAdapte
         }
 
         // loading album cover using Glide library
-        Picasso.with(mContext).load(product.getSkus().get(0).getImages().get(0).getImageurl()).into(holder.thumbnail);
+        //Picasso.with(mContext).load(noticia.getSkus().get(0).getImages().get(0).getImageurl()).into(holder.thumbnail);
 
     }
 

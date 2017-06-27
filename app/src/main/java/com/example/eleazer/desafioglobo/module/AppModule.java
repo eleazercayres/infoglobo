@@ -1,6 +1,9 @@
 package com.example.eleazer.desafioglobo.module;
 
-import com.example.eleazer.desafiomobfiq.service.AppService;
+
+import android.support.v7.app.AppCompatActivity;
+
+import com.example.eleazer.desafioglobo.service.AppService;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,13 +16,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-public class AppModule {
+public class AppModule extends AppCompatActivity {
 
 
     private String url;
 
     @Provides
-    public AppService getChatService() {
+    public AppService getService() {
 
         Gson gson = new GsonBuilder()
                 .enableComplexMapKeySerialization()
@@ -30,7 +33,7 @@ public class AppModule {
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://desafio.mobfiq.com.br/")
+                .baseUrl("https://raw.githubusercontent.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 

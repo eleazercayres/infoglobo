@@ -2,8 +2,8 @@ package com.example.eleazer.desafioglobo.app;
 
 import android.app.Application;
 
-import com.example.eleazer.desafiomobfiq.component.AppComponent;
-import com.example.eleazer.desafiomobfiq.component.DaggerAppComponent;
+import com.example.eleazer.desafioglobo.component.AppComponent;
+import com.example.eleazer.desafioglobo.component.DaggerAppComponent;
 
 public class AppApplication extends Application {
 
