@@ -5,15 +5,15 @@ import com.example.eleazer.desafioglobo.modelos.Noticias;
 
 import java.util.List;
 
-public class NoticiasEvent {
+public class CarregaNoticiasEvent {
 
     public List<Noticias> noticias;
 
-    public NoticiasEvent(List<Noticias> noticias) {
+    public CarregaNoticiasEvent(List<Noticias> noticias) {
         this.noticias = noticias;
     }
 
-    public NoticiasEvent() {
+    public CarregaNoticiasEvent() {
 
     }
 }

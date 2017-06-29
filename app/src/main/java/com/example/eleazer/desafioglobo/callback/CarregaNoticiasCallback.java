@@ -1,6 +1,6 @@
 package com.example.eleazer.desafioglobo.callback;
 
-import com.example.eleazer.desafioglobo.event.NoticiasEvent;
+import com.example.eleazer.desafioglobo.event.CarregaNoticiasEvent;
 import com.example.eleazer.desafioglobo.modelos.Noticias;
 
 import org.greenrobot.eventbus.EventBus;
@@ -24,7 +24,7 @@ public class CarregaNoticiasCallback implements Callback<List<Noticias>> {
         if(response.isSuccessful()) {
             List<Noticias> noticiasList = response.body();
 
-            eventBus.post(new NoticiasEvent(noticiasList));
+            eventBus.post(new CarregaNoticiasEvent(noticiasList));
         }
     }
 

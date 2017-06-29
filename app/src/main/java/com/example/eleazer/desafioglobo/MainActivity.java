@@ -15,14 +15,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.eleazer.desafioglobo.adapter.NoticiasAdapter;
 import com.example.eleazer.desafioglobo.app.AppApplication;
 import com.example.eleazer.desafioglobo.callback.OuvirNoticiasCallback;
 import com.example.eleazer.desafioglobo.component.AppComponent;
-import com.example.eleazer.desafioglobo.event.NoticiasEvent;
+import com.example.eleazer.desafioglobo.event.CarregaNoticiasEvent;
+import com.example.eleazer.desafioglobo.manager.NoticiasManager;
 import com.example.eleazer.desafioglobo.modelos.Noticias;
 import com.example.eleazer.desafioglobo.service.AppService;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,9 +50,16 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.recycler_view)
     public RecyclerView recyclerView;
 
+    @BindView(R.id.imageDestaque)
+    ImageView imageDestaque;
+
+    @BindView(R.id.titleDestaque)
+    TextView titleDestaque;
+
     @Inject
     EventBus eventBus;
 
+    private NoticiasManager noticiasManager;
     private List<Noticias> noticias;
     private NoticiasAdapter adapter;
 
@@ -63,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         injectAll();
 
         eventBus.register(this);
-        ouvirNoticias(new NoticiasEvent());
+        ouvirNoticias();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -87,32 +98,38 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    @Subscribe
-    public void ouvirNoticias(NoticiasEvent mensagemEvent) {
+    public void ouvirNoticias() {
         Call<List<Noticias>> call = appService.ouvirNoticias();
         call.enqueue(new OuvirNoticiasCallback(eventBus, this));
     }
 
     @Subscribe
-    public void carregaNoticias(NoticiasEvent noticiasEvent) {
+    public void carregaNoticias(CarregaNoticiasEvent carregaNoticiasEvent) {
 
-        if (noticiasEvent != null && noticiasEvent.noticias != null){
-            noticias = noticiasEvent.noticias;
+        if (noticias == null) {
+            if (carregaNoticiasEvent != null && carregaNoticiasEvent.noticias != null){
+                noticias = carregaNoticiasEvent.noticias;
 
-            adapter = new NoticiasAdapter(this, noticias){
-                @Override
-                public void load() {
-                    //implement your load more here
+                noticiasManager = new NoticiasManager(noticias);
+
+                Picasso.with(this).load(noticiasManager.getDestaque().getImagens().get(0).getUrl()).into(imageDestaque);
+                titleDestaque.setText(noticiasManager.getDestaque().getTitulo());
+
+                adapter = new NoticiasAdapter(this, noticiasManager.getConteudos()){
+                    @Override
+                    public void load() {
+                        //implement your load more here
                     /*offset = size+ 1;
                     size = size + 11;
                     pesquisaProdutos();*/
-                }
-            };
+                    }
+                };
 
-            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-            recyclerView.setLayoutManager(mLayoutManager);
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
-            recyclerView.setAdapter(adapter);
+                RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
+                recyclerView.setAdapter(adapter);
+            }
         }
     }
 
