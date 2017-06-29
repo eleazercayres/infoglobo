@@ -5,6 +5,7 @@ import com.example.eleazer.desafioglobo.modelos.Noticias;
 import com.example.eleazer.desafioglobo.modelos.Secao;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class NoticiasManager {
@@ -32,12 +33,27 @@ public class NoticiasManager {
         if (conteudos!= null && conteudos.size() > 0) {
             destaque = conteudos.get(DESTAQUE);
             conteudos.remove(destaque);
-            for (Conteudo conteudo :conteudos) {
+
+            Iterator<Conteudo> i = conteudos.iterator();
+            while (i.hasNext()) {
+                Conteudo conteudo = i.next(); // must be called before you can call i.remove()
                 if (secoes == null) {
                     secoes = new ArrayList<>();
                 }
+                if (conteudo.getImagens() != null && conteudo.getImagens().size()<=0){
+                    i.remove();
+                }
                 secoes.add(conteudo.getSecao());
             }
+           /* for (Conteudo conteudo :conteudos) {
+                if (secoes == null) {
+                    secoes = new ArrayList<>();
+                }
+                if (conteudo.getImagens() != null && conteudo.getImagens().size()>0){
+                    conteudos.add(conteudo);
+                }
+                secoes.add(conteudo.getSecao());
+            }*/
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.eleazer.desafioglobo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,12 +19,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chootdev.recycleclick.RecycleClick;
 import com.example.eleazer.desafioglobo.adapter.NoticiasAdapter;
 import com.example.eleazer.desafioglobo.app.AppApplication;
 import com.example.eleazer.desafioglobo.callback.OuvirNoticiasCallback;
 import com.example.eleazer.desafioglobo.component.AppComponent;
 import com.example.eleazer.desafioglobo.event.CarregaNoticiasEvent;
 import com.example.eleazer.desafioglobo.manager.NoticiasManager;
+import com.example.eleazer.desafioglobo.modelos.Conteudo;
 import com.example.eleazer.desafioglobo.modelos.Noticias;
 import com.example.eleazer.desafioglobo.service.AppService;
 import com.squareup.picasso.Picasso;
@@ -55,6 +58,9 @@ public class MainActivity extends AppCompatActivity
 
     @BindView(R.id.titleDestaque)
     TextView titleDestaque;
+
+    @BindView(R.id.imageTitle)
+    TextView imageTitle;
 
     @Inject
     EventBus eventBus;
@@ -114,6 +120,7 @@ public class MainActivity extends AppCompatActivity
 
                 Picasso.with(this).load(noticiasManager.getDestaque().getImagens().get(0).getUrl()).into(imageDestaque);
                 titleDestaque.setText(noticiasManager.getDestaque().getTitulo());
+                imageTitle.setText(noticiasManager.getDestaque().getSecao().getNome());
 
                 adapter = new NoticiasAdapter(this, noticiasManager.getConteudos()){
                     @Override
@@ -129,8 +136,23 @@ public class MainActivity extends AppCompatActivity
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(adapter);
+
+                RecycleClick.addTo(recyclerView).setOnItemClickListener(new RecycleClick.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Conteudo conteudo = noticiasManager.getConteudos().get(position);
+                        startSecondActivity(conteudo);
+                    }
+                });
             }
         }
+    }
+
+    public void startSecondActivity(Conteudo conteudo) {
+
+        Intent secondActivity = new Intent(this, DetalheActivity.class);
+        secondActivity.putExtra("conteudo", conteudo);
+        this.startActivity(secondActivity);
     }
 
     @Override
@@ -166,7 +188,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            this.finish();
+            System.exit(0);
         }
 
         return super.onOptionsItemSelected(item);

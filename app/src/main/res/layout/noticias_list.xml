@@ -29,7 +29,6 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Brasil"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/thumbnail"
                 android:layout_alignParentRight="true"/>
@@ -44,7 +43,6 @@
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                android:text="Loren Ipson Dolum"
                 android:layout_below="@id/title"
                 android:layout_toRightOf="@+id/thumbnail"/>
 
