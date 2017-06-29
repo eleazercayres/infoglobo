@@ -36,24 +36,24 @@ public class NoticiasManager {
 
             Iterator<Conteudo> i = conteudos.iterator();
             while (i.hasNext()) {
-                Conteudo conteudo = i.next(); // must be called before you can call i.remove()
+                Conteudo conteudo = i.next();
                 if (secoes == null) {
                     secoes = new ArrayList<>();
                 }
                 if (conteudo.getImagens() != null && conteudo.getImagens().size()<=0){
                     i.remove();
+                    continue;
+                }
+                if (conteudo.getAutores()== null || conteudo.getAutores() != null && conteudo.getAutores().size() == 0) {
+                    i.remove();
+                    continue;
+                }
+                if(conteudo.getTexto() == null) {
+                    i.remove();
+                    continue;
                 }
                 secoes.add(conteudo.getSecao());
             }
-           /* for (Conteudo conteudo :conteudos) {
-                if (secoes == null) {
-                    secoes = new ArrayList<>();
-                }
-                if (conteudo.getImagens() != null && conteudo.getImagens().size()>0){
-                    conteudos.add(conteudo);
-                }
-                secoes.add(conteudo.getSecao());
-            }*/
         }
     }
 

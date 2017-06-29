@@ -24,6 +24,7 @@ import com.example.eleazer.desafioglobo.adapter.NoticiasAdapter;
 import com.example.eleazer.desafioglobo.app.AppApplication;
 import com.example.eleazer.desafioglobo.callback.OuvirNoticiasCallback;
 import com.example.eleazer.desafioglobo.component.AppComponent;
+import com.example.eleazer.desafioglobo.enumerator.ActivityEnum;
 import com.example.eleazer.desafioglobo.event.CarregaNoticiasEvent;
 import com.example.eleazer.desafioglobo.manager.NoticiasManager;
 import com.example.eleazer.desafioglobo.modelos.Conteudo;
@@ -34,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -122,15 +124,9 @@ public class MainActivity extends AppCompatActivity
                 titleDestaque.setText(noticiasManager.getDestaque().getTitulo());
                 imageTitle.setText(noticiasManager.getDestaque().getSecao().getNome());
 
-                adapter = new NoticiasAdapter(this, noticiasManager.getConteudos()){
-                    @Override
-                    public void load() {
-                        //implement your load more here
-                    /*offset = size+ 1;
-                    size = size + 11;
-                    pesquisaProdutos();*/
-                    }
-                };
+                clickDestaque();
+
+                adapter = new NoticiasAdapter(this, noticiasManager.getConteudos());
 
                 RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
                 recyclerView.setLayoutManager(mLayoutManager);
@@ -148,10 +144,26 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void clickDestaque() {
+        imageDestaque.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startSecondActivity(noticiasManager.getDestaque());
+            }
+        });
+
+        imageTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startSecondActivity(noticiasManager.getDestaque());
+            }
+        });
+    }
+
     public void startSecondActivity(Conteudo conteudo) {
 
         Intent secondActivity = new Intent(this, DetalheActivity.class);
-        secondActivity.putExtra("conteudo", conteudo);
+        secondActivity.putExtra(ActivityEnum.CONTEUDO.name(), conteudo);
         this.startActivity(secondActivity);
     }
 
@@ -174,19 +186,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             this.finish();
             System.exit(0);
@@ -198,11 +205,9 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {

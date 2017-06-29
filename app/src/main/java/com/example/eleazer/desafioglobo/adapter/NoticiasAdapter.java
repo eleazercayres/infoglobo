@@ -22,7 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public abstract class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
+public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyViewHolder> {
 
     private Context mContext;
     private List<Conteudo> conteudos;
@@ -64,8 +64,6 @@ public abstract class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapt
             Picasso.with(mContext).load(noticia.getImagens().get(0).getUrl()).into(holder.thumbnail);
         }
     }
-
-    public abstract void load();
 
    @Override
     public int getItemCount() {

@@ -11,7 +11,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.eleazer.desafioglobo.enumerator.ActivityEnum;
 import com.example.eleazer.desafioglobo.modelos.Conteudo;
+import com.example.eleazer.desafioglobo.util.DateUtils;
 import com.squareup.picasso.Picasso;
 
 import org.eclipse.jdt.internal.compiler.batch.Main;
@@ -60,26 +62,18 @@ public class DetalheActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intent = this.getIntent();
-        Conteudo conteudo = (Conteudo) intent.getSerializableExtra("conteudo");
+        Conteudo conteudo = (Conteudo) intent.getSerializableExtra(ActivityEnum.CONTEUDO.name());
 
         if (conteudo != null) {
 
             Picasso.with(this).load(conteudo.getImagens().get(0).getUrl()).into(thumbnail);
+
             title.setText(conteudo.getTitulo());
             subTitulo.setText(conteudo.getSubTitulo());
 
-            if (conteudo.getAutores() == null) {
-                autor.setVisibility(View.GONE);
-                por.setVisibility(View.GONE);
-            } else {
-                autor.setText(conteudo.getAutores().get(0));
-            }
+            setAutorInView(conteudo);
 
-            try {
-                data.setText(formatDate(conteudo.getPublicadoEm()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            formatDataInView(conteudo);
 
             imageTitle.setText(conteudo.getImagens().get(0).getLegenda());
             texto.setText(conteudo.getTexto());
@@ -89,7 +83,6 @@ public class DetalheActivity extends AppCompatActivity {
         toolbar.setTitle(conteudo.getSecao().getNome());
         setSupportActionBar(toolbar);
 
-        // add back arrow to toolbar
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -105,6 +98,23 @@ public class DetalheActivity extends AppCompatActivity {
         });
     }
 
+    private void formatDataInView(Conteudo conteudo) {
+        try {
+            data.setText(DateUtils.formatDate(conteudo.getPublicadoEm()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setAutorInView(Conteudo conteudo) {
+        if (conteudo.getAutores()== null || conteudo.getAutores() != null && conteudo.getAutores().size() == 0) {
+            autor.setVisibility(View.GONE);
+            por.setVisibility(View.GONE);
+        } else {
+            autor.setText(conteudo.getAutores().get(0));
+        }
+    }
+
     public void startFirstActivity() {
 
         Intent secondActivity = new Intent(this, MainActivity.class);
@@ -113,23 +123,11 @@ public class DetalheActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
+
         if (item.getItemId() == android.R.id.home) {
-            startFirstActivity();// close this activity and return to preview activity (if there is any)
+            startFirstActivity();
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    //TODO: Colocar em uma classe auxiliar
-    private String formatDate(String date) throws ParseException {
-
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ssZ");
-        Date result;
-        result = df.parse(date);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return sdf.format(result);
     }
 
 }
