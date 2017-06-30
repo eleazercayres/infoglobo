@@ -28,13 +28,16 @@ import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class DestaqueAssertTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void mainActivityTest() {
+    public void destaqueAssertTest() throws InterruptedException {
+
+        Thread.sleep(5000);
+
         ViewInteraction imageView = onView(
                 allOf(withId(R.id.imageDestaque),
                         childAtPosition(
@@ -46,22 +49,22 @@ public class MainActivityTest {
         imageView.check(matches(isDisplayed()));
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.imageTitle), withText("Brasil"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                        1),
-                                1),
-                        isDisplayed()));
-        textView.check(matches(isDisplayed()));
-
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.titleDestaque), withText("Sérgio Cabral é denunciado pela sexta vez na Lava-Jato"),
+                allOf(withId(R.id.titleDestaque),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
                                         1),
                                 2),
+                        isDisplayed()));
+        textView.check(matches(isDisplayed()));
+
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.imageTitle),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
+                                        1),
+                                1),
                         isDisplayed()));
         textView2.check(matches(isDisplayed()));
 
