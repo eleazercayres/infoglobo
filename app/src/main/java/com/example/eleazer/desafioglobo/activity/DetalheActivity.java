@@ -1,4 +1,4 @@
-package com.example.eleazer.desafioglobo;
+package com.example.eleazer.desafioglobo.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,18 +11,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.eleazer.desafioglobo.R;
 import com.example.eleazer.desafioglobo.enumerator.ActivityEnum;
 import com.example.eleazer.desafioglobo.modelos.Conteudo;
 import com.example.eleazer.desafioglobo.util.DateUtils;
 import com.squareup.picasso.Picasso;
 
-import org.eclipse.jdt.internal.compiler.batch.Main;
-
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

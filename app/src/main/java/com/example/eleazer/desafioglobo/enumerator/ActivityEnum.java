@@ -2,7 +2,8 @@ package com.example.eleazer.desafioglobo.enumerator;
 
 public enum ActivityEnum {
 
-    CONTEUDO("conteudo");
+    CONTEUDO("conteudo"),
+    TODOS("Todos");
 
     private String value;
 

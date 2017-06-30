@@ -1,8 +1,6 @@
 package com.example.eleazer.desafioglobo.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.eleazer.desafioglobo.DetalheActivity;
-import com.example.eleazer.desafioglobo.MainActivity;
 import com.example.eleazer.desafioglobo.R;
 import com.example.eleazer.desafioglobo.modelos.Conteudo;
-import com.example.eleazer.desafioglobo.modelos.Noticias;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -35,6 +30,8 @@ public class NoticiasAdapter extends RecyclerView.Adapter<NoticiasAdapter.MyView
 
         public MyViewHolder(View view) {
             super(view);
+
+            ButterKnife.bind(view);
 
             editora = (TextView) view.findViewById(R.id.title);
             tituloNoticia = (TextView) view.findViewById(R.id.tituloNoticia);

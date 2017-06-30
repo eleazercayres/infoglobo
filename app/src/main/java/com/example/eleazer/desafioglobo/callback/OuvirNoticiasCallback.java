@@ -1,6 +1,6 @@
 package com.example.eleazer.desafioglobo.callback;
 
-import com.example.eleazer.desafioglobo.MainActivity;
+import com.example.eleazer.desafioglobo.activity.MainActivity;
 import com.example.eleazer.desafioglobo.event.FailureEvent;
 import com.example.eleazer.desafioglobo.event.CarregaNoticiasEvent;
 import com.example.eleazer.desafioglobo.modelos.Noticias;

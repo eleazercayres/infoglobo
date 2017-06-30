@@ -1,12 +1,14 @@
 package com.example.eleazer.desafioglobo.manager;
 
+import com.example.eleazer.desafioglobo.enumerator.ActivityEnum;
 import com.example.eleazer.desafioglobo.modelos.Conteudo;
 import com.example.eleazer.desafioglobo.modelos.Noticias;
-import com.example.eleazer.desafioglobo.modelos.Secao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class NoticiasManager {
 
@@ -14,8 +16,11 @@ public class NoticiasManager {
     public static final int CONTEUDOS = 0;
 
     private List<Noticias> noticiasList;
+
     private Conteudo destaque;
-    private List<Secao> secoes;
+    private String urlImageDestaque;
+    private List<String> secoes;
+    private Map<String, String> secaoMap;
     private List<Conteudo> conteudos;
 
     public NoticiasManager(List<Noticias> noticiasList) {
@@ -31,30 +36,91 @@ public class NoticiasManager {
             conteudos = noticiasList.get(CONTEUDOS).getConteudos();
         }
         if (conteudos!= null && conteudos.size() > 0) {
-            destaque = conteudos.get(DESTAQUE);
-            conteudos.remove(destaque);
 
-            Iterator<Conteudo> i = conteudos.iterator();
-            while (i.hasNext()) {
-                Conteudo conteudo = i.next();
-                if (secoes == null) {
-                    secoes = new ArrayList<>();
-                }
-                if (conteudo.getImagens() != null && conteudo.getImagens().size()<=0){
-                    i.remove();
-                    continue;
-                }
-                if (conteudo.getAutores()== null || conteudo.getAutores() != null && conteudo.getAutores().size() == 0) {
-                    i.remove();
-                    continue;
-                }
-                if(conteudo.getTexto() == null) {
-                    i.remove();
-                    continue;
-                }
-                secoes.add(conteudo.getSecao());
+            carregaDestaque();
+
+            Iterator<Conteudo> iterator = conteudos.iterator();
+
+            while (iterator.hasNext()) {
+
+                Conteudo conteudo = iterator.next();
+
+                if (validarImagem(iterator, conteudo)) continue;
+
+                if (validarAutor(iterator, conteudo)) continue;
+
+                if (validarTexto(iterator, conteudo)) continue;
+
+                validarSecao(conteudo);
+
+                secoes =  new ArrayList(secaoMap.keySet());
             }
         }
+    }
+
+    private void validarSecao(Conteudo conteudo) {
+        if (secaoMap
+                == null) {
+            secaoMap = new HashMap<>();
+        }
+        secaoMap.put(conteudo.getSecao().getNome(), conteudo.getSecao().getNome());
+    }
+
+    private boolean validarTexto(Iterator<Conteudo> i, Conteudo conteudo) {
+        if(conteudo.getTexto() == null) {
+            i.remove();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean validarAutor(Iterator<Conteudo> i, Conteudo conteudo) {
+        if (conteudo.getAutores()== null || conteudo.getAutores() != null && conteudo.getAutores().size() == 0) {
+            i.remove();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean validarImagem(Iterator<Conteudo> i, Conteudo conteudo) {
+        if (conteudo.getImagens() != null && conteudo.getImagens().size()<=0){
+            i.remove();
+            return true;
+        }
+        return false;
+    }
+
+    private void carregaDestaque() {
+
+        destaque = conteudos.get(DESTAQUE);
+        if (carregaImagemDestaque(destaque)){
+            conteudos.remove(destaque);
+        } else {
+            conteudos.remove(destaque);
+            carregaDestaque();
+        }
+    }
+
+    private boolean carregaImagemDestaque(Conteudo destaque) {
+
+        boolean result = false;
+        if (getDestaque() != null && getDestaque().getImagens() != null
+                && getDestaque().getImagens().get(0) != null
+                && getDestaque().getImagens().get(0).getUrl() != null){
+
+            urlImageDestaque = getDestaque().getImagens().get(0).getUrl();
+            result = true;
+        }
+
+        return result;
+    }
+
+    public List<String> getSecoes() {
+        return secoes;
+    }
+
+    public void setSecoes(List<String> secoes) {
+        this.secoes = secoes;
     }
 
     public Conteudo getDestaque() {
@@ -73,4 +139,29 @@ public class NoticiasManager {
         this.conteudos = conteudos;
     }
 
+    public String getUrlImageDestaque() {
+        return urlImageDestaque;
+    }
+
+    public void setUrlImageDestaque(String urlImageDestaque) {
+        this.urlImageDestaque = urlImageDestaque;
+    }
+
+    public List<Conteudo> carregaConteudoFiltro(String nameMenu) {
+
+        List<Conteudo> conteudoFilter = new ArrayList<>();
+        Iterator<Conteudo> iterator = conteudos.iterator();
+
+        if (nameMenu.equalsIgnoreCase(ActivityEnum.TODOS.getValue())) {
+            conteudoFilter = conteudos;
+        } else {
+            while (iterator.hasNext()) {
+                Conteudo conteudo = iterator.next();
+                if (conteudo.getSecao().getNome().equalsIgnoreCase(nameMenu)) {
+                    conteudoFilter.add(conteudo);
+                }
+            }
+        }
+        return conteudoFilter;
+    }
 }
